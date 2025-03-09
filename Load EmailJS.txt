@@ -1,0 +1,43 @@
+// Load EmailJS
+const script = document.createElement("script");
+script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
+document.head.appendChild(script);
+
+document.addEventListener("DOMContentLoaded", function () {
+    setTimeout(() => emailjs.init("NLKsF9bfmXk5p4nns"), 2000); // Your Public Key
+
+    const form = document.getElementById("contactForm");
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Stop the form from submitting normally
+
+        let firstName = document.getElementById("first-name").value.trim();
+        let lastName = document.getElementById("last-name").value.trim();
+        let email = document.getElementById("email").value.trim();
+        let message = document.getElementById("message").value.trim();
+
+        // Validate fields
+        if (!firstName || !lastName || !email || !message) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        // Prepare email data
+        let emailData = {
+            name: firstName + " " + lastName,
+            email: email,
+            message: message
+        };
+
+        // Send email using EmailJS
+        emailjs.send("service_dq38egl", "template_3aeutg6", emailData)
+            .then(() => {
+                alert("Form Successfully Submitted! ✅");
+                form.reset(); // Clear the form
+            })
+            .catch(error => {
+                alert("Error sending message. Please try again.");
+                console.log(error);
+            });
+    });
+});
